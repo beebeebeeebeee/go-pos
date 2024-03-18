@@ -1,32 +1,50 @@
 package main
 
 import (
+	"context"
 	"embed"
+	"go-pos/internal/app/adapter/controller"
+	"go-pos/internal/app/adapter/service"
+	"go-pos/internal/app/domain"
+	"go-pos/internal/app/infrastructure/receipt"
 
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
 )
 
-//go:embed all:frontend/dist
+//go:embed all:internal/app/presentation/dist
 var assets embed.FS
 
 func main() {
-	// Create an instance of the app structure
-	app := NewApp()
+	receiptClient := receipt.NewClient(float64(12), 30, "Fung Coffee 3")
 
-	// Create application with options
+	printerService := service.NewPrinterService()
+	receiptService := service.NewReceiptService(receiptClient)
+
+	di := domain.NewDI(
+		printerService,
+		receiptService,
+	)
+
+	receiptController := controller.NewReceiptController(di)
+	printerController := controller.NewPrinterController(di)
+
 	err := wails.Run(&options.App{
-		Title:  "myproject",
-		Width:  1024,
-		Height: 768,
+		Title:  "go-pos",
+		Width:  800,
+		Height: 600,
 		AssetServer: &assetserver.Options{
 			Assets: assets,
 		},
 		BackgroundColour: &options.RGBA{R: 27, G: 38, B: 54, A: 1},
-		OnStartup:        app.startup,
+		OnStartup: func(ctx context.Context) {
+			receiptController.SetCtx(ctx)
+			printerController.SetCtx(ctx)
+		},
 		Bind: []interface{}{
-			app,
+			receiptController,
+			printerController,
 		},
 	})
 

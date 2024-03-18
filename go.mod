@@ -1,4 +1,4 @@
-module changeme
+module go-pos
 
 go 1.21
 
