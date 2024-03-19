@@ -1,8 +1,9 @@
 package receipt
 
 import (
-	"fmt"
 	"github.com/go-pdf/fpdf"
+	"golang.org/x/text/language"
+	"golang.org/x/text/message"
 )
 
 type Printer struct {
@@ -19,9 +20,9 @@ func NewPrinter(
 	lineSpacing int,
 ) *Printer {
 	pdf := fpdf.New("P", "mm", "A4", "")
-	pdf.AddUTF8Font("SpaceMono", "", "fonts/SpaceMono-Regular.ttf")
+	pdf.AddUTF8Font("AssetsMono", "", "fonts/MPLUS1Code-VariableFont_wght.ttf")
 	pdf.AddPage()
-	pdf.SetFont("SpaceMono", "", fontSize)
+	pdf.SetFont("AssetsMono", "", fontSize)
 	pdf.SetX(10)
 
 	return &Printer{
@@ -42,11 +43,11 @@ func (p *Printer) PrintLine(text string) {
 }
 
 func (p *Printer) GetCenterText(text string) string {
-	return p.GetSpacing(p.LineSpacing/2-len(text)/2) + text
+	return p.GetSpacing(p.LineSpacing/2-p.GetTextLength(text)/2) + text
 }
 
 func (p *Printer) GetStringWithSpacing(text1 string, text2 string) string {
-	return text1 + p.GetSpacing(p.LineSpacing-len(text1)-len(text2)) + text2
+	return text1 + p.GetSpacing(p.LineSpacing-p.GetTextLength(text1)-p.GetTextLength(text2)) + text2
 }
 
 func (p *Printer) GetDivider() string {
@@ -66,5 +67,19 @@ func (p *Printer) GetSpacing(spaces int) string {
 }
 
 func (p *Printer) FormatPrice(price float64) string {
-	return "$" + fmt.Sprintf("%.2f", price)
+	return message.NewPrinter(language.English).Sprintf("$%.2f", price)
+}
+
+func (p *Printer) GetTextLength(text string) int {
+	// non english characters are count as 2
+	var length int
+	for _, char := range text {
+		if char > 127 {
+			length += 2
+		} else {
+			length++
+		}
+	}
+
+	return length
 }

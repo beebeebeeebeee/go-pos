@@ -24,26 +24,18 @@ func (a *ReceiptController) SetCtx(ctx context.Context) {
 }
 
 var order = entity.Order{
-	OrderID: "123",
+	ID: "123",
 	OrderItems: []entity.OrderItem{
 		{
 			Item: entity.Item{
-				Name:  "Iced Americano",
-				Price: 40.00,
+				Name:  "大餅",
+				Price: 1000.00,
 			},
-			Quantity:   1,
-			TotalPrice: 40.00,
-		},
-		{
-			Item: entity.Item{
-				Name:  "Drip Coffee",
-				Price: 80.00,
-			},
-			Quantity:   1,
-			TotalPrice: 80.00,
+			Quantity:   37,
+			TotalPrice: 37000.00,
 		},
 	},
-	TotalPrice: 120.00,
+	TotalPrice: 37000.00,
 }
 
 func (a *ReceiptController) GetReceipt() (string, error) {

@@ -1,6 +1,7 @@
 package receipt
 
 import (
+	"fmt"
 	"go-pos/internal/app/domain/entity"
 )
 
@@ -29,11 +30,11 @@ func (c *Client) GetReceipt(
 	printer := NewPrinter(c.FontSize, c.LineSpacing)
 
 	printer.PrintLine(printer.GetCenterText(c.CompanyName))
-	printer.PrintLine("Tel: 1234567890")
 	printer.PrintLine(printer.GetDivider())
 
 	for _, orderItem := range orders.OrderItems {
-		printer.PrintLine(printer.GetStringWithSpacing(orderItem.Item.Name, printer.FormatPrice(orderItem.TotalPrice)))
+		printer.PrintLine(orderItem.Item.Name)
+		printer.PrintLine(printer.GetStringWithSpacing(fmt.Sprintf("%dx %s", orderItem.Quantity, printer.FormatPrice(orderItem.Item.Price)), printer.FormatPrice(orderItem.TotalPrice)))
 	}
 
 	printer.PrintLine(printer.GetDivider())

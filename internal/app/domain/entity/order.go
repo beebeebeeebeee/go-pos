@@ -1,13 +1,9 @@
 package entity
 
-type OrderItem struct {
-	Item       Item
-	Quantity   int
-	TotalPrice float64
-}
+type OrderID string
 
 type Order struct {
-	OrderID    string
+	ID         OrderID
 	OrderItems []OrderItem
 	TotalPrice float64
 }

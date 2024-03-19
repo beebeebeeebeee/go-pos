@@ -27,6 +27,7 @@ func main() {
 		receiptService,
 	)
 
+	itemController := controller.NewItemController(di)
 	receiptController := controller.NewReceiptController(di)
 	printerController := controller.NewPrinterController(di)
 
@@ -39,10 +40,12 @@ func main() {
 		},
 		BackgroundColour: &options.RGBA{R: 27, G: 38, B: 54, A: 1},
 		OnStartup: func(ctx context.Context) {
+			itemController.SetCtx(ctx)
 			receiptController.SetCtx(ctx)
 			printerController.SetCtx(ctx)
 		},
 		Bind: []interface{}{
+			itemController,
 			receiptController,
 			printerController,
 		},
