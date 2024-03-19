@@ -1,3 +1,8 @@
 body {
     margin: 0;
 }
+
+@font-face {
+    font-family: 'AssetsMono';
+    src: local('AssetsMono'), url(./assets/fonts/MPLUS1Code-VariableFont_wght.ttf) format('truetype');
+}
