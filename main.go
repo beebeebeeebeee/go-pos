@@ -17,7 +17,7 @@ import (
 var assets embed.FS
 
 func main() {
-	receiptClient := receipt.NewClient(float64(12), 30, "Fung Coffee 3")
+	receiptClient := receipt.NewClient(float64(12), 38, "Company Name")
 
 	printerService := service.NewPrinterService()
 	receiptService := service.NewReceiptService(receiptClient)
@@ -28,6 +28,7 @@ func main() {
 	)
 
 	itemController := controller.NewItemController(di)
+	orderController := controller.NewOrderController(di)
 	receiptController := controller.NewReceiptController(di)
 	printerController := controller.NewPrinterController(di)
 
@@ -41,11 +42,13 @@ func main() {
 		BackgroundColour: &options.RGBA{R: 27, G: 38, B: 54, A: 1},
 		OnStartup: func(ctx context.Context) {
 			itemController.SetCtx(ctx)
+			orderController.SetCtx(ctx)
 			receiptController.SetCtx(ctx)
 			printerController.SetCtx(ctx)
 		},
 		Bind: []interface{}{
 			itemController,
+			orderController,
 			receiptController,
 			printerController,
 		},

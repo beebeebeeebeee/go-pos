@@ -35,6 +35,10 @@ func NewPrinter(
 }
 
 func (p *Printer) PrintLine(text string) {
+	if len(text) < p.LineSpacing {
+		text = text + p.GetSpacing(p.LineSpacing-p.GetTextLength(text))
+	}
+
 	p.text = p.text + text + "\n"
 
 	p.pdf.SetY(10 + p.FontSize/2*float64(p.line))

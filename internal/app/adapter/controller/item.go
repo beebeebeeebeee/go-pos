@@ -25,13 +25,7 @@ func (i *ItemController) SetCtx(ctx context.Context) {
 
 func (i *ItemController) GetItemList() []entity.Item {
 	return []entity.Item{
-		{
-			Name:  "細餅",
-			Price: 500.00,
-		},
-		{
-			Name:  "大餅",
-			Price: 1000.00,
-		},
+		entity.NewItem(entity.ItemID(""), "細餅", 500.00),
+		entity.NewItem(entity.ItemID(""), "大餅", 1000.00),
 	}
 }

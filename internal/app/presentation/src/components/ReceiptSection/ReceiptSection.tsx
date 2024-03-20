@@ -1,21 +1,20 @@
 import { Box } from "@mui/material";
+import { useReceipt } from "@/provider";
 
-type ReceiptProps = {
-  text: string;
-};
+export function ReceiptSection(): JSX.Element {
+  const { receiptText } = useReceipt();
 
-export function Receipt(props: ReceiptProps) {
-  const { text } = props;
   return (
     <Box
       sx={{
         fontFamily: "AssetsMono",
         fontSize: "0.75rem",
         whiteSpace: "pre-wrap",
+        textAlign: "center",
         width: "15rem",
       }}
     >
-      {text}
+      {receiptText}
     </Box>
   );
 }

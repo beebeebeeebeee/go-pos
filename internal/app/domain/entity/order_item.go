@@ -3,8 +3,8 @@ package entity
 type OrderItemID string
 
 type OrderItem struct {
-	ID         OrderItemID
-	Item       Item
-	Quantity   int
-	TotalPrice float64
+	ID         OrderItemID `json:"id"`
+	Item       Item        `json:"item"`
+	Quantity   int         `json:"quantity"`
+	TotalPrice float64     `json:"totalPrice"`
 }

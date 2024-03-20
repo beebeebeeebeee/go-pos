@@ -7,6 +7,7 @@ import "@/style.css";
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { createTheme, ThemeProvider } from "@mui/material";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { App } from "@/components";
 
 const container = document.getElementById("root");
@@ -19,10 +20,14 @@ const theme = createTheme({
   },
 });
 
+const queryClient = new QueryClient();
+
 root.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
-      <App />
+      <QueryClientProvider client={queryClient}>
+        <App />
+      </QueryClientProvider>
     </ThemeProvider>
   </React.StrictMode>
 );

@@ -1,8 +1,8 @@
 package entity
 
 type Printer struct {
-	Name      string
-	IsDefault bool
-	Selected  bool
-	Options   map[string]string
+	Name      string            `json:"name"`
+	IsDefault bool              `json:"isDefault"`
+	Selected  bool              `json:"selected"`
+	Options   map[string]string `json:"options"`
 }
