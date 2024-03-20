@@ -4,6 +4,7 @@ import (
 	"context"
 	"go-pos/internal/app/domain"
 	"go-pos/internal/app/domain/entity"
+	"go-pos/internal/app/domain/usecase"
 )
 
 type ItemController struct {
@@ -24,8 +25,5 @@ func (i *ItemController) SetCtx(ctx context.Context) {
 }
 
 func (i *ItemController) GetItemList() []entity.Item {
-	return []entity.Item{
-		entity.NewItem(entity.ItemID(""), "細餅", 500.00),
-		entity.NewItem(entity.ItemID(""), "大餅", 1000.00),
-	}
+	return usecase.GetAllItems(i.di.ItemService)
 }

@@ -1,17 +1,21 @@
+type IItemId = string;
+type IOderId = string;
+type IOderItemId = string;
+
 type IItem = {
-  id: string;
+  id: IItemId;
   name: string;
   price: number;
 };
 
 type IOrder = {
-  id: string;
+  id: IOderId;
   orderItems: OrderItem[];
   totalPrice: number;
 };
 
 type IOrderItem = {
-  id: string;
+  id: IOderItemId;
   item: Item;
   quantity: number;
   totalPrice: number;
@@ -26,6 +30,9 @@ type IPrinter = {
 
 declare module "@wails/models" {
   namespace entity {
+    type ItemID = IItemId;
+    type OrderID = IOderId;
+    type OrderItemID = IOderItemId;
     type Item = IItem;
     type Order = IOrder;
     type OrderItem = IOrderItem;

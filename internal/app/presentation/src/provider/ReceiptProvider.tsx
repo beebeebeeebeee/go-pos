@@ -7,6 +7,7 @@ import {
 } from "react";
 import { useQuery } from "@tanstack/react-query";
 import * as ReceiptController from "@wails/controller/ReceiptController";
+import { useOrder } from "@/provider/OrderProvider";
 
 export type ReceiptContextType = {
   receiptText: string;
@@ -25,14 +26,19 @@ export type ReceiptProviderProps = {
 export function ReceiptProvider(props: ReceiptProviderProps): JSX.Element {
   const { children } = props;
 
+  const { order } = useOrder();
+
   const { data, refetch } = useQuery<string>({
-    queryKey: ["receipt"],
-    queryFn: () => ReceiptController.GetReceipt(),
+    queryKey: ["receipt", order],
+    queryFn: async () =>
+      order != null ? await ReceiptController.GetReceipt(order.id) : "",
   });
 
-  const printReceipt = useCallback(() => {
-    ReceiptController.PrintReceipt();
-  }, []);
+  const printReceipt = useCallback(async () => {
+    if (order == null) return;
+
+    await ReceiptController.PrintReceipt(order.id);
+  }, [order]);
 
   const value: ReceiptContextType = useMemo(
     () => ({ receiptText: data ?? "", refetchReceipt: refetch, printReceipt }),

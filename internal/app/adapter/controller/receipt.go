@@ -23,22 +23,9 @@ func (a *ReceiptController) SetCtx(ctx context.Context) {
 	a.ctx = ctx
 }
 
-var order = entity.Order{
-	ID: "123",
-	OrderItems: []entity.OrderItem{
-		{
-			Item: entity.Item{
-				Name:  "大餅",
-				Price: 1000.00,
-			},
-			Quantity:   37,
-			TotalPrice: 37000.00,
-		},
-	},
-	TotalPrice: 37000.00,
-}
+func (a *ReceiptController) GetReceipt(orderID entity.OrderID) (string, error) {
+	order := usecase.GetOrderByID(a.di.OrderService, orderID)
 
-func (a *ReceiptController) GetReceipt() (string, error) {
 	receiptText, err := usecase.GenerateReceipt(a.di.ReceiptService, order)
 	if err != nil {
 		log.Println("error while get receipt:", err)
@@ -48,7 +35,9 @@ func (a *ReceiptController) GetReceipt() (string, error) {
 	return receiptText, nil
 }
 
-func (a *ReceiptController) PrintReceipt() error {
+func (a *ReceiptController) PrintReceipt(orderID entity.OrderID) error {
+	order := usecase.GetOrderByID(a.di.OrderService, orderID)
+
 	if _, err := usecase.PrintReceipt(a.di.ReceiptService, a.di.PrinterService, order); err != nil {
 		log.Println("error while print receipt:", err)
 		return err

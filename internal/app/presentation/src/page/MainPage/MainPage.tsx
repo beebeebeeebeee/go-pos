@@ -1,10 +1,25 @@
-import React from "react";
-import { Button, Divider, Grid, Stack } from "@mui/material";
-import { ItemProvider, ReceiptProvider, useReceipt } from "@/provider";
+import React, { useCallback } from "react";
+import { Button, Grid, Stack } from "@mui/material";
+import { entity } from "@wails/models";
+import {
+  ItemProvider,
+  OrderProvider,
+  ReceiptProvider,
+  useOrder,
+  useReceipt,
+} from "@/provider";
 import { ItemSection, ReceiptSection } from "@/components";
 
 function _MainPage(): JSX.Element {
+  const { updateOrderItem } = useOrder();
   const { refetchReceipt, printReceipt } = useReceipt();
+
+  const addItem = useCallback(
+    async (item: entity.Item) => {
+      await updateOrderItem(item, 1);
+    },
+    [updateOrderItem]
+  );
 
   return (
     <Grid container spacing={2}>
@@ -23,8 +38,8 @@ function _MainPage(): JSX.Element {
       </Grid>
       <Grid item xs>
         <ItemSection
-          addItem={() => {
-            refetchReceipt();
+          addItem={async (item) => {
+            await addItem(item);
           }}
         />
       </Grid>
@@ -34,10 +49,12 @@ function _MainPage(): JSX.Element {
 
 export function MainPage(): JSX.Element {
   return (
-    <ItemProvider>
-      <ReceiptProvider>
-        <_MainPage />
-      </ReceiptProvider>
-    </ItemProvider>
+    <OrderProvider>
+      <ItemProvider>
+        <ReceiptProvider>
+          <_MainPage />
+        </ReceiptProvider>
+      </ItemProvider>
+    </OrderProvider>
   );
 }

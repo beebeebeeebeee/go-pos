@@ -19,10 +19,14 @@ var assets embed.FS
 func main() {
 	receiptClient := receipt.NewClient(float64(12), 38, "Company Name")
 
+	itemService := service.NewItemService()
+	orderService := service.NewOrderService()
 	printerService := service.NewPrinterService()
 	receiptService := service.NewReceiptService(receiptClient)
 
 	di := domain.NewDI(
+		itemService,
+		orderService,
 		printerService,
 		receiptService,
 	)
